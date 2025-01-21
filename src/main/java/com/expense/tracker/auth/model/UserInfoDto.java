@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class) //snake case is USER_INFO like that
-public class UserDto extends UserInfo {   //Dto are there for API data transfer not fro DB call modelling
+public class UserInfoDto extends UserInfo {   //Dto are there for API data transfer not fro DB call modelling
 
     private String userName; //json will make user_name
 

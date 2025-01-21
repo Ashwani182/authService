@@ -2,7 +2,7 @@ package com.expense.tracker.auth.controller;
 
 import com.expense.tracker.auth.Util.UserUtility;
 import com.expense.tracker.auth.entities.RefreshToken;
-import com.expense.tracker.auth.model.UserDto;
+import com.expense.tracker.auth.model.UserInfoDto;
 import com.expense.tracker.auth.response.JwtResponseDto;
 import com.expense.tracker.auth.service.JwtService;
 import com.expense.tracker.auth.service.RefreshTokenService;
@@ -29,17 +29,17 @@ public class AuthController {
     private UserDetailServiceImpl userDetailService;
 
     @PostMapping("auth/v1/signup")
-    public ResponseEntity signup(@RequestBody UserDto userDto){
+    public ResponseEntity signup(@RequestBody UserInfoDto userInfoDto){
         try{
-//            if(!UserUtility.validatePassword(userDto.getPassword())){
-//                return new ResponseEntity<>("Password is not strong ..!", HttpStatus.BAD_REQUEST);
-//            }
-            Boolean isSignuped = userDetailService.signUpUser(userDto);
+            if(!UserUtility.validatePassword(userInfoDto.getPassword())){
+                return new ResponseEntity<>("Password is not strong ..!", HttpStatus.BAD_REQUEST);
+            }
+            Boolean isSignuped = userDetailService.signUpUser(userInfoDto);
             if(!isSignuped){
                 return new ResponseEntity<>("User already exist ..!", HttpStatus.BAD_REQUEST);
             }
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDto.getUsername());
-            String jwtToken=jwtService.generateToken(userDto.getUsername());
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(userInfoDto.getUsername());
+            String jwtToken=jwtService.generateToken(userInfoDto.getUsername());
             return new ResponseEntity<>(JwtResponseDto.builder().accessToken(jwtToken).
                     token(refreshToken.getToken()).build(), HttpStatus.OK);
         }catch (Exception ex){

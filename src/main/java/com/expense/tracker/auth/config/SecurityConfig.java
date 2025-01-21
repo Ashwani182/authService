@@ -31,7 +31,7 @@ public class SecurityConfig { //this class direct all the calls needs to go thro
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserDetailServiceImpl userDetailService;
+    private UserDetailServiceImpl userDetailServiceimpl;
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder, UserRepository userRepository){
@@ -60,7 +60,7 @@ public class SecurityConfig { //this class direct all the calls needs to go thro
     @Bean
     public AuthenticationProvider authenticationProvider() { //this auth provider will help with user details
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailService);
+        authenticationProvider.setUserDetailsService(userDetailServiceimpl);
         authenticationProvider.setPasswordEncoder(passwordEncoder);
         return  authenticationProvider;
     }

@@ -1,7 +1,7 @@
 package com.expense.tracker.auth.service;
 
 import com.expense.tracker.auth.entities.UserInfo;
-import com.expense.tracker.auth.model.UserDto;
+import com.expense.tracker.auth.model.UserInfoDto;
 import com.expense.tracker.auth.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,22 +39,23 @@ public class UserDetailServiceImpl implements UserDetailsService { //UserDetails
 
     }
 
-    public UserInfo checkIfUserAlreadyExist(UserDto userDto){
-        return userRepository.findByUsername(userDto.getUsername());
+    public UserInfo checkIfUserAlreadyExist(UserInfoDto userInfoDto){
+        return userRepository.findByUsername(userInfoDto.getUsername());
     }
 
-    public Boolean signUpUser(UserDto userDto){
+    public Boolean signUpUser(UserInfoDto userInfoDto){
 
-            userDto.setPassword(passwordEncoder.encode(userDto.getPassword())); //it encodes the password with hashkey
-            if(Objects.nonNull(checkIfUserAlreadyExist(userDto))){
+            userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword())); //it encodes the password with hashkey
+            if(Objects.nonNull(checkIfUserAlreadyExist(userInfoDto))){
                 return false;
             }else {
-                UserInfo.builder()
-                        .username(userDto.getUsername())
-                        .password(userDto.getPassword())
+                UserInfo userInfo=UserInfo.builder()
+                        .username(userInfoDto.getUsername())
+                        .password(userInfoDto.getPassword())
                         .userid(UUID.randomUUID().toString())
                         .userRoleSet(new HashSet<>())
                         .build();
+                userRepository.save(userInfo);
                 // pushEventToQueue
                 return true;
             }
