@@ -1,5 +1,6 @@
 package com.expense.tracker.auth.config;
 
+import com.expense.tracker.auth.eventProducer.UserInfoProducer;
 import com.expense.tracker.auth.repository.UserRepository;
 import com.expense.tracker.auth.service.UserDetailServiceImpl;
 import lombok.Data;
@@ -33,10 +34,14 @@ public class SecurityConfig { //this class direct all the calls needs to go thro
     @Autowired
     private UserDetailServiceImpl userDetailServiceimpl;
 
+    @Autowired
+    private final UserInfoProducer userInfoProducer;
+
+
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder, UserRepository userRepository){
         //this will provide user info to spring at start that's why we implement UserDetail service there
-        return new UserDetailServiceImpl(passwordEncoder, userRepository);
+        return new UserDetailServiceImpl(passwordEncoder, userRepository,userInfoProducer);
     }
 
  //Spring Security Filter Chain for all calls here we will define what happens with https(Secure) calls comes to this app

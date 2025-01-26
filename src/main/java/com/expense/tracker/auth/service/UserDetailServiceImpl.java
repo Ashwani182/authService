@@ -1,6 +1,8 @@
 package com.expense.tracker.auth.service;
 
 import com.expense.tracker.auth.entities.UserInfo;
+import com.expense.tracker.auth.eventProducer.UserInfoEvent;
+import com.expense.tracker.auth.eventProducer.UserInfoProducer;
 import com.expense.tracker.auth.model.UserInfoDto;
 import com.expense.tracker.auth.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,9 @@ public class UserDetailServiceImpl implements UserDetailsService { //UserDetails
     @Autowired
     private final UserRepository userRepository;
 
+    @Autowired
+    private UserInfoProducer userInfoProducer;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { //login user
         UserInfo user = userRepository.findByUsername(username);
@@ -40,7 +45,7 @@ public class UserDetailServiceImpl implements UserDetailsService { //UserDetails
     }
 
     public UserInfo checkIfUserAlreadyExist(UserInfoDto userInfoDto){
-        return userRepository.findByUsername(userInfoDto.getUsername());
+        return userRepository.findByUsername(userInfoDto.getFirstName());
     }
 
     public Boolean signUpUser(UserInfoDto userInfoDto){
@@ -50,15 +55,26 @@ public class UserDetailServiceImpl implements UserDetailsService { //UserDetails
                 return false;
             }else {
                 UserInfo userInfo=UserInfo.builder()
-                        .username(userInfoDto.getUsername())
+                        .username(userInfoDto.getFirstName())
                         .password(userInfoDto.getPassword())
-                        .userid(UUID.randomUUID().toString())
+                        .userId(UUID.randomUUID().toString())
                         .userRoleSet(new HashSet<>())
                         .build();
                 userRepository.save(userInfo);
                 // pushEventToQueue
+                userInfoProducer.sendEvent(userInfoDtoToUserInfoEvent(userInfoDto));
                 return true;
             }
+    }
+
+    private UserInfoEvent userInfoDtoToUserInfoEvent(UserInfoDto userInfoDto){
+        return UserInfoEvent.builder()
+                .firstName(userInfoDto.getFirstName())
+                .userId(userInfoDto.getUserId())
+                .email(userInfoDto.getEmail())
+                .phoneNumber(userInfoDto.getPhoneNumber())
+                .lastName(userInfoDto.getLastName())
+                .build();
     }
 
 }

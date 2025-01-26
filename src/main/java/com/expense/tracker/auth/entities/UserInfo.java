@@ -19,7 +19,7 @@ public class UserInfo {
 
     @Id
     @Column(name="user_id")//here no need of generated value because it will be enter by programmning
-    private String userid;
+    private String userId;
 
     private String username;
 
