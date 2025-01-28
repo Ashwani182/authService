@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@JsonIgnoreProperties(ignoreUnknown = true) // this will make sure to ignore if something is null it wont serialise that
+@JsonIgnoreProperties(ignoreUnknown = true) // this will make sure to ignore if something is null it won't serialise that
 public class UserInfoEvent {
 
 

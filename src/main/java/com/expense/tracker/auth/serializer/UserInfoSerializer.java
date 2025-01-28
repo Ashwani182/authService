@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Map;
-
+//using kafka serializer and passing for type of object needs to be serialize
 public class UserInfoSerializer implements Serializer<UserInfoEvent> {
 
 
@@ -13,7 +13,7 @@ public class UserInfoSerializer implements Serializer<UserInfoEvent> {
     public void configure(Map<String, ?> configs, boolean isKey) {
 
     }
-
+// Only need to serialize this methode others not need to be override
     @Override
     public byte[] serialize(String s, UserInfoEvent userInfoEvent) {
         byte[] bytesTosend = null;
