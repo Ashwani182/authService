@@ -35,6 +35,12 @@ public class JwtAuthFilter extends OncePerRequestFilter { //OncePerRequestFilter
     @Override //this filter is applied to servlet request so before reching to server (controller)
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        String requestURI = request.getRequestURI();
+        if ("/auth/v1/signup".equals(requestURI) || "/auth/v1/login".equals(requestURI) || "/auth/v1/refreshToken".equals(requestURI)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         //first get header with Authorization anme
         String authHeader = request.getHeader("Authorization");
         String token= null;

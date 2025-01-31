@@ -37,6 +37,9 @@ public class SecurityConfig { //this class direct all the calls needs to go thro
     @Autowired
     private final UserInfoProducer userInfoProducer;
 
+    @Autowired
+    private final RequestLoggingFilter requestLoggingFilter;
+
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder, UserRepository userRepository){
@@ -58,6 +61,7 @@ public class SecurityConfig { //this class direct all the calls needs to go thro
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//will not sore session DB
                 .httpBasic(Customizer.withDefaults())//all other htt basic set to default
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)//Now add filter to all other calls before they hit. if we do not provide it goes to default.UsernamePasswordAuthenticationFilter is a type of jwtfilter
+                .addFilterBefore(requestLoggingFilter,JwtAuthFilter.class)// for logging the http request
                 .authenticationProvider(authenticationProvider())
                 .build();
     }

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.expense.tracker</groupId>
     <artifactId>auth</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>authService</name>
     <description>Auth Service of Expense Tracker App</description>
     <url/>
@@ -27,7 +27,7 @@
         <url/>
     </scm>
     <properties>
-        <java.version>22</java.version>
+        <java.version>17</java.version>
         <spring-cloud.version>2024.0.0</spring-cloud.version>
     </properties>
     <dependencies>
@@ -138,6 +138,17 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
@@ -149,6 +160,18 @@
                             <version>1.18.36</version>
                         </path>
                     </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <mainClass>com.expense.tracker.auth.AuthServiceApplication</mainClass> <!-- Replace with your main class -->
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>
